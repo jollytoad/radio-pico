@@ -3,7 +3,7 @@ from time import sleep_ms
 import neopixel
 import random
 
-brightness = 1.0 # 0-1
+brightness = 0.5 # 0-1
 chance = 20 # 0-100, TODO: set this to audio output level
 
 delay = 20
@@ -99,6 +99,10 @@ def spiral(i):
 
     p = all[i % len(all)]
     np[p] = hsv_to_rgb(i/360, 1, brightness/3)
+
+def init():
+    np.fill((0,0,0))
+    np.write()
 
 def loop(i, pattern):
     if (pattern == 0):

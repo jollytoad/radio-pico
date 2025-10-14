@@ -4,17 +4,21 @@ from machine import Pin
 import neopixel
 
 KEYS = (
-    # Screen buttons
-    (Pin.cpu.GPIO2, KeyCode.A, 2), # 4 (physical pin)
-    (Pin.cpu.GPIO3, KeyCode.B, 1), # 5
-    (Pin.cpu.GPIO4, KeyCode.C, 0), # 6
-    (Pin.cpu.GPIO5, KeyCode.D, 3), # 7
-    (Pin.cpu.GPIO6, KeyCode.E, 4), # 9
-    (Pin.cpu.GPIO7, KeyCode.F, 5), # 10
+    # Screen buttons left
+    (Pin.cpu.GPIO2, KeyCode.A, 3),
+    (Pin.cpu.GPIO3, KeyCode.B, 4),
+    (Pin.cpu.GPIO4, KeyCode.C, 5),
 
-    # Rotary encoder buttons
-    (Pin.cpu.GPIO10, KeyCode.X, -1), # 13
-    (Pin.cpu.GPIO11, KeyCode.Y, -1), # 14
+    # Screen buttons right
+    (Pin.cpu.GPIO7, KeyCode.D, 2),
+    (Pin.cpu.GPIO6, KeyCode.E, 1),
+    (Pin.cpu.GPIO5, KeyCode.F, 0),
+
+    # Rotary encoder button - side
+    (Pin.cpu.GPIO13, KeyCode.X, -1),
+
+    # Rotary encoder button - front right
+    (Pin.cpu.GPIO18, KeyCode.Y, -2),
 )
 
 np = neopixel.NeoPixel(Pin(9), 6)
@@ -29,11 +33,13 @@ def init():
     # Register the keyboard interface and re-enumerate
     usb.device.get().init(k, builtin_driver=True)
 
+    np.fill((0,255,0))
+    np.write()
+
 keys = []  # Keys held down, reuse the same list object
 prev_keys = [None]  # Previous keys, starts with a dummy value so first
 
 def loop():
-    activate = False
     if k.is_open():
         keys.clear()
         for pin, code, led in KEYS:
@@ -48,11 +54,9 @@ def loop():
             k.send_keys(keys)
             prev_keys.clear()
             prev_keys.extend(keys)
-            activate = True
+            np.write()
 
-        np.write()
-
-    return activate
+    return keys
 
 def done():
     np.fill((0,0,0))

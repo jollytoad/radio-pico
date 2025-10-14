@@ -1,6 +1,7 @@
 import time
 import leds
 import keys
+from usb.device.keyboard import KeyCode
 
 DELAY = 20
 
@@ -9,11 +10,12 @@ def main():
   pattern = 0
 
   keys.init()
+  leds.init()
 
   while True:
     try:
-      activate = keys.loop()
-      if (activate):
+      pressed = keys.loop()
+      if (pressed == [KeyCode.X]):
         pattern = (pattern + 1) % 4
       leds.loop(i, pattern)
       time.sleep_ms(DELAY)
