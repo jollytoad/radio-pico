@@ -17,7 +17,7 @@ KEYS = (
     (Pin.cpu.GPIO11, KeyCode.Y, -1), # 14
 )
 
-np = neopixel.NeoPixel(Pin(21), 6)
+np = neopixel.NeoPixel(Pin(9), 6)
 
 k = KeyboardInterface()
 

@@ -25,7 +25,7 @@ ring = [
 # usable pixels
 leds = all
 
-np = neopixel.NeoPixel(Pin(22), n)
+np = neopixel.NeoPixel(Pin(8), n)
 
 def hsv_to_rgb(h, s, v):
     if s == 0.0:
