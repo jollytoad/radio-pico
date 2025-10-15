@@ -88,6 +88,8 @@ patterns = [
 
 def init():
   print('START')
+  side_btn.init(Pin.IN, Pin.PULL_UP)
+  front_btn.init(Pin.IN, Pin.PULL_UP)
   np.fill((0,0,0))
   np.write()
 
