@@ -11,9 +11,9 @@ KEYS = ( # (Pin, KeyCode, Led, Colour)
   (Pin.cpu.GPIO4, KeyCode.C, 5, (0,0,255)), # Pause
 
   # Screen buttons right
-  (Pin.cpu.GPIO7, KeyCode.N0, 2, (255,127,0)), # Preset 0
-  (Pin.cpu.GPIO6, KeyCode.N1, 1, (0,255,127)), # Preset 1
-  (Pin.cpu.GPIO5, KeyCode.N2, 0, (127,0,255)), # Preset 2
+  (Pin.cpu.GPIO7, KeyCode.N1, 2, (255,127,0)), # Preset 1
+  (Pin.cpu.GPIO6, KeyCode.N2, 1, (0,255,127)), # Preset 2
+  (Pin.cpu.GPIO5, KeyCode.N3, 0, (127,0,255)), # Preset 3
 )
 
 N = const(6)
