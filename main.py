@@ -1,5 +1,6 @@
 import leds
 import keys
+import status
 from time import sleep_ms
 from usb.device.keyboard import KeyCode # type: ignore
 
@@ -16,8 +17,12 @@ def main():
       keys.loop(i)
       leds.loop(i)
 
-      sleep_ms(DELAY)
-      i += 1
+      if status.audio_active or status.keys_lit or status.leds_lit:
+        sleep_ms(DELAY)
+        i += 1
+      else:
+        sleep_ms(DELAY * 10)
+
     except KeyboardInterrupt:
       break
   
