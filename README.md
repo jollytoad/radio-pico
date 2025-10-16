@@ -5,7 +5,7 @@ This is my kitchen radio project.
 - Case: A 1940s Bakelite [Bush DAC90](https://collections.vam.ac.uk/item/O372024/bush-dac90-radio-middleditch-frank-e/)
 - Hardware:
   - [Raspberry Pi 3 Model B+](https://www.raspberrypi.com/products/raspberry-pi-3-model-b-plus/)
-  - [DigiAmp+](https://www.raspberrypi.com/products/digiamp-plus/)
+  - [DigiAmp+](https://www.raspberrypi.com/products/digiamp-plus/) and [power supply](https://thepihut.com/products/pi-digiamp-plus-power-brick-15v-3-33a-50w)
   - [Waveshare 4.3inch touchscreen](https://www.waveshare.com/wiki/4.3inch_DSI_LCD)
   - [Raspberry Pi Pico 2](https://www.raspberrypi.com/products/raspberry-pi-pico-2/)
   - 3 x [KY-040 Rotary Encoder](https://www.amazon.co.uk/dp/B07SV5HHM5)
