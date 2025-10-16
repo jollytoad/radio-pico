@@ -2,6 +2,8 @@
 
 cp -v watch_running.sh ~/watch_running.sh
 
-mpremote reset
+echo "Installing to Pico..."
+
+mpremote reset 2>/dev/null
 mpremote fs cp *.py :
 mpremote reset

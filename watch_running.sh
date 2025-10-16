@@ -2,13 +2,17 @@
 
 # Find the squeezelite shared memory file
 SHM_FILE=$(ls /dev/shm/squeezelite-??:??:??:??:??:?? 2>/dev/null | head -n 1)
+LED_FILE=$(ls /sys/class/leds/input?::scrolllock/brightness 2>/dev/null | head -n 1)
 
 if [ -z "$SHM_FILE" ]; then
   echo "Error: No squeezelite shared memory file found in /dev/shm/"
   exit 1
 fi
 
-LED_FILE="/sys/class/leds/input0::scrolllock/brightness"
+if [ -z "$LED_FILE" ]; then
+  echo "Error: No usb keyboard leds found in /sys/class/leds/"
+  exit 1
+fi
 
 echo "Monitoring: $SHM_FILE"
 echo "Watching 'running' flag for changes..."

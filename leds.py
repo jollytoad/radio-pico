@@ -106,12 +106,14 @@ def init():
   np.write()
 
 def loop(i):
-  global pattern, side_down, front_down
+  global pattern, side_down, front_down, fade_level
 
   fade()
 
   if status.audio_active:
     patterns[pattern](i)
+  else:
+    fade_level = 2
 
   if (side_down and side_btn()):
     print('side click')

@@ -2,7 +2,6 @@ import leds
 import keys
 import status
 from time import sleep_ms
-from usb.device.keyboard import KeyCode # type: ignore
 
 DELAY = 20
 
