@@ -113,7 +113,6 @@ def loop(i):
   if status.audio_active:
     patterns[pattern](i)
 
-  # TODO: switch pattern when rot btn is clicked
   if (side_down and side_btn()):
     print('side click')
     pattern = (pattern+1) % len(patterns)
