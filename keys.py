@@ -25,6 +25,8 @@ np = NeoPixel(Pin(9), N)
 class Keyboard(KeyboardInterface):
   def on_led_update(self, led_mask):
     status.audio_active = bool(led_mask & LEDCode.SCROLL_LOCK)
+    status.leds_lit = True
+    status.keys_lit = True
 
 k = Keyboard()
 
