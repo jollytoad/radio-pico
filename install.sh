@@ -1,6 +1,7 @@
 #!/bin/sh
 
-cp -v watch_running.sh ~/watch_running.sh
+cp -v watch_running.sh ~/
+cp -v watch_running_daemon.sh ~/
 
 echo "Installing to Pico..."
 
