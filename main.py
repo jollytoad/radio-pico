@@ -3,7 +3,8 @@ import keys
 import status
 from time import sleep_ms
 
-DELAY = 20
+DELAY = const(20)
+LOW_POWER_DELAY = const(100)
 
 def main():
   i = 0
@@ -20,7 +21,7 @@ def main():
         sleep_ms(DELAY)
         i += 1
       else:
-        sleep_ms(DELAY * 10)
+        sleep_ms(LOW_POWER_DELAY)
 
     except KeyboardInterrupt:
       break
