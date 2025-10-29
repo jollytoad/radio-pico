@@ -3,8 +3,8 @@ import keys
 import status
 from time import sleep_ms
 
-DELAY = const(20)
-LOW_POWER_DELAY = const(100)
+_DELAY = const(20)
+_LOW_POWER_DELAY = const(100)
 
 def main():
   i = 0
@@ -18,10 +18,10 @@ def main():
       leds.loop(i)
 
       if status.audio_active or status.keys_lit or status.leds_lit:
-        sleep_ms(DELAY)
+        sleep_ms(_DELAY)
         i += 1
       else:
-        sleep_ms(LOW_POWER_DELAY)
+        sleep_ms(_LOW_POWER_DELAY)
 
     except KeyboardInterrupt:
       break

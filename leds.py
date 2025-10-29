@@ -1,141 +1,143 @@
 from machine import Pin
-from micropython import const
 from neopixel import NeoPixel
 from random import randint, randrange
-from rots import side_btn, side_down, side_rot, front_btn, front_down, front_rot
+import rots
 import status
 import hsv
 
 # total leds
-N = const(59)
+_N = const(59)
 
 # all usable leds
-all = range(1,58+1)
+_all = range(1,58+1)
 
 # range of leds in each ring
-ring = [
+_ring = [
   range(2, 23+1),
   range(23, 40+1),
   range(42, 52+1),
   range(53, 58+1)
 ]
 
-np = NeoPixel(Pin(8), N)
+_np = NeoPixel(Pin(8), _N)
 
-fade_random = False
-fade_level = 10
+_fade_random: bool = False
+_fade_level: int = 10
 
-def fade():
+def _fade():
   if status.leds_lit:
-    lit = False
+    status.leds_lit = False
     # reduce the levels of status.leds_lit leds evenly or with a slight randomness
-    for j in range(N):
-      if np[j] != (0,0,0):
-        if fade_level > 0:
-          fade_amount = randint(fade_level // 2, fade_level) if fade_random else fade_level
-          np[j] = tuple(map(lambda a : max(a - fade_amount, 0), np[j]))
-        lit = True
-    if fade_level > 0:
-      np.write()
-    status.leds_lit = lit
+    for j in range(_N):
+      if _np[j] != (0,0,0):
+        if _fade_level > 0:
+          fade_amount = randint(_fade_level // 2, _fade_level) if _fade_random else _fade_level
+          _np[j] = tuple(map(lambda a : max(a - fade_amount, 0), _np[j]))
+        status.leds_lit = True
+    if _fade_level > 0:
+      _np.write()
 
-def fireworks(i):
-  global fade_level, fade_random
-  chance = side_rot.value() // 2
-  brightness = front_rot.value()
-  fade_level = side_rot.value()
-  fade_random = True
+def _fireworks(i):
+  global _fade_level, _fade_random
+
+  chance: int = rots.side_rot.value() // 2
+  brightness: int = rots.front_rot.value()
+  _fade_level = rots.side_rot.value()
+  _fade_random = True
 
   # should we light a new led?
   if randrange(0,100) < chance:
     # pick a random led
-    p = all[randrange(len(all))]
+    p = _all[randrange(len(_all))]
 
     # only light it if it's off
-    if (np[p] == (0,0,0)):
+    if (_np[p] == (0,0,0)):
       # set a random hue and saturation
-      np[p] = hsv.to_rgb(randint(0, 359), randint(128, 255), brightness)
-      np.write()
+      _np[p] = hsv.to_rgb(randint(0, 359), randint(128, 255), brightness)
+      _np.write()
       status.leds_lit = True
 
-def pulse(i):
-  global fade_level, fade_random
-  freq = max((100-side_rot.value()) // 30, 1)
-  brightness = front_rot.value() // 4
-  fade_level = 5
-  fade_random = False
+def _pulse(i):
+  global _fade_level, _fade_random
+
+  freq: int = max((100-rots.side_rot.value()) // 30, 1)
+  brightness: int = rots.front_rot.value() // 4
+  _fade_level = 5
+  _fade_random = False
 
   if (i % freq == 0):
-    r = int(i/freq) % (len(ring)*3)
-    if (r < len(ring)):
+    r = int(i/freq) % (len(_ring)*3)
+    if (r < len(_ring)):
       c = hsv.to_rgb(randint(0, 359), randint(200, 255), brightness)
-      for p in ring[len(ring)-1-r]:
-        np[p] = c
-      np.write()
+      for p in _ring[len(_ring)-1-r]:
+        _np[p] = c
+      _np.write()
       status.leds_lit = True
 
-def spiral(i):
-  global fade_level, fade_random
-  brightness = front_rot.value() // 3
-  fade_level = 10
-  fade_random = False
+def _spiral(i):
+  global _fade_level, _fade_random
 
-  p = all[i % len(all)]
-  np[p] = hsv.to_rgb(i % 360, 255, brightness)
-  np.write()
+  brightness = rots.front_rot.value() // 3
+  _fade_level = 10
+  _fade_random = False
+
+  p = _all[i % len(_all)]
+  _np[p] = hsv.to_rgb(i % 360, 255, brightness)
+  _np.write()
   status.leds_lit = True
 
-def static(i):
-  global fade_level, fade_random
-  chance = side_rot.value() // 2
-  v = front_rot.value() // 4
-  fade_level = 0
-  fade_random = False
+def _static(i):
+  global _fade_level, _fade_random
 
-  for p in all:
-    np[p] = (v, v, v) if randrange(0,100) < chance else (0,0,0)
-  np.write()
+  chance = rots.side_rot.value() // 2
+  v = rots.front_rot.value() // 4
+  _fade_level = 0
+  _fade_random = False
+
+  for p in _all:
+    _np[p] = (v, v, v) if randrange(0,100) < chance else (0,0,0)
+  _np.write()
   status.leds_lit = True
 
-pattern: int = 0
+_pattern: int = 0
 
-patterns = [
-  static,
-  pulse,
-  spiral,
-  fireworks
+_patterns = [
+  _static,
+  _pulse,
+  _spiral,
+  _fireworks
 ]
 
 def init():
   print('START')
-  side_btn.init(Pin.IN, Pin.PULL_UP)
-  front_btn.init(Pin.IN, Pin.PULL_UP)
-  np.fill((0,0,0))
-  np.write()
+  rots.side_btn.init(Pin.IN, Pin.PULL_UP)
+  rots.front_btn.init(Pin.IN, Pin.PULL_UP)
+  _np.fill((0,0,0))
+  _np.write()
 
 def loop(i):
-  global pattern, side_down, front_down, fade_level, fade_random
+  global _pattern, _fade_level, _fade_random
 
-  fade()
+  _fade()
 
   if status.audio_active:
-    patterns[pattern](i)
+    _patterns[_pattern](i)
   else:
-    fade_level = 8
-    fade_random = True
+    _fade_level = 8
+    _fade_random = True
 
-  if (side_down and side_btn()):
+  if (rots.side_down and rots.side_btn()):
     print('side click')
-    pattern = (pattern+1) % len(patterns)
-    print('pattern', pattern)
+    _pattern = (_pattern+1) % len(_patterns)
+    print('pattern', _pattern)
 
-  if (front_down and front_btn()):
+  if (rots.front_down and rots.front_btn()):
     print('front click')
-    pattern = (pattern-1) % len(patterns)
+    _pattern = (_pattern-1) % len(_patterns)
 
-  side_down = not side_btn()
-  front_down = not front_btn()
+  rots.side_down = not rots.side_btn()
+  rots.front_down = not rots.front_btn()
 
 def done():
-  np.fill((0,0,0))
-  np.write()
+  _np.fill((0,0,0))
+  _np.write()
